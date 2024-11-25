@@ -1,0 +1,176 @@
+<mvc:View
+    controllerName="com.app.zuichangenot.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{view>/title}"
+    >
+        <headerContent>
+            <Button
+                icon="sap-icon://edit"
+                text="Edit"
+                tooltip="Edit"
+                press="onEdit"
+                visible="{view>/editBtn}"
+            />
+            <Button
+                icon="sap-icon://display"
+                text="Display"
+                press="onDisplay"
+                visible="{view>/disBtn}"
+            />
+        </headerContent>
+        <content>
+            <f:SimpleForm
+                id="ID1"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                title="{view>/ftitle}"
+                labelSpanXL="4"
+                labelSpanL="4"
+                labelSpanM="4"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="0"
+                emptySpanL="0"
+                emptySpanM="0"
+                emptySpanS="0"
+                columnsXL="2"
+                columnsL="2"
+                columnsM="2"
+                singleContainerFullSize="false"
+            >
+                <f:content>
+                    <core:Title text="" />
+                    <Label text="Notification No." />
+                    <Text text="{notifData>/NotifNo}" />
+                    <Label text="Notification Type" />
+                    <Text text="{view>/ftitle}" />
+                    <Label text="Notification Date" />
+                    <DatePicker
+                        enabled="false"
+                        value="{
+        path: 'notifData>/NotifDate',
+        type: 'sap.ui.model.type.Date'
+    }"
+                        valueFormat="yyyy-MM-dd"
+                        displayFormat="long"
+                    />
+                    <Label text="Notification Status" />
+                    <Text text="{view>/sysStatus}" />
+                    <core:Title text="" />
+                    <Label text="Functional Loc" />
+                    <Text text="{notifData>/FunctLoc}" />
+                    <Label text="Equipment" />
+                    <Text text="{notifData>/Equipment}" />
+                    <Label text="Work Center" />
+                    <Input
+                        value="{view>/Workctr}"
+                        editable="false"
+                    />
+                    <Input
+                        value="{notifData>/Planplant}"
+                        editable="false"
+                    />
+                    <Label text="Created By" />
+                    <Text text="{notifData>/CreatedBy}" />
+                </f:content>
+            </f:SimpleForm>
+            <f:SimpleForm
+                id="ID3"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                title="Malfunction Data"
+                labelSpanXL="4"
+                labelSpanL="4"
+                labelSpanM="4"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="0"
+                emptySpanL="0"
+                emptySpanM="0"
+                emptySpanS="0"
+                columnsXL="2"
+                columnsL="2"
+                columnsM="2"
+                singleContainerFullSize="false"
+            >
+                <f:content>
+                    <core:Title text="" />
+                    <Label text="Malfunction Start Date" />
+                    <DatePicker
+                        value="{
+        path: 'notifData>/Strmlfndate',
+        type: 'sap.ui.model.type.Date'
+    }"
+                        valueFormat="yyyy-MM-dd"
+                        displayFormat="long"
+                        editable="false"
+                    />
+                    <Label text="Malfunction Start Time" />
+                    <TimePicker
+                        value="{
+				path: 'notifData>/Strmlfndate',
+				type: 'sap.ui.model.type.Time'}"
+                        editable="false"
+                    />
+                      <Label text="Description" />
+                    <Input value="{notifData>/ShortText}" editable="{view>/editable}" valueState="{view>/valueState}"/>
+                    <Label text="Long Text" />
+                    <TextArea
+                        value="{view>/ltext}"
+                        width="100%" height="150px"
+                        editable="{view>/editable}" valueState="{view>/valueState}"
+                    />
+                    <core:Title text="" />
+                    <Label text="Priority" />
+                    <Input
+                        value="{view>/prtyDesc}"
+                        editable="false"
+                    />
+                    <Label text="Requested End Date" />
+                    <DatePicker
+                        value="{
+        path: 'notifData>/Desstdate',
+        type: 'sap.ui.model.type.Date'
+    }"
+                        placeholder="Enter Date"
+                        change="handleChange"
+                        class="sapUiSmallMarginBottom"
+                        editable="false"
+                    />
+                </f:content>
+            </f:SimpleForm>
+        </content>
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Button
+                    type="Emphasized"
+                    text="Complete"
+                    press="onComplete"
+                    visible="{view>/comBtnVis}"
+                />
+                <Button
+                    type="Emphasized"
+                    text="Create Work Order"
+                    press="onCreatePress"
+                    visible="{view>/comBtnVis}"
+                />
+                <Button
+                    type="Emphasized"
+                    text="Save"
+                    press="onSavePress"
+                    visible="{view>/saveBtnVis}"
+                />
+                <Label />
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>
