@@ -12,8 +12,8 @@ sap.ui.define([
         return Controller.extend("com.app.zuichangenot.controller.View1", {
             onInit: function () {
                 this.editInd = "";
-                  var sParam = this.getOwnerComponent().getComponentData().startupParameters;
-                this.getDetails(sParam.NotificationNo[0]);
+                  this.sParam = this.getOwnerComponent().getComponentData().startupParameters;
+                this.getDetails(this.sParam.NotificationNo[0]);
                 this.oModel = new JSONModel({
                     dDefaultDate: new Date(),
                     orderTyp: "",
@@ -27,8 +27,9 @@ sap.ui.define([
                     ftitle: "",
                     prtyDesc: "",
                     sysStatus: "",
-                    Workctr: sParam.Workcenter[0],
-                    ltext: ""
+                    Workctr: this.sParam.Workcenter[0],
+                    ltext: "",
+                    valueStateLTxt : ""
 
                 });
                 this.getView().setModel(this.oModel, "view");
@@ -89,10 +90,16 @@ sap.ui.define([
                 if (val === "NOCO ORAS" || val === "NOCO") {
                     this.oModel.setProperty("/comBtnVis", false);
                     this.oModel.setProperty("/editBtn", false);
+                    this.oModel.setProperty("/createBtnVis", false);
 
-                } else {
+                } else if(val === "NOPR ORAS"){
                     this.oModel.setProperty("/comBtnVis", true);
                     this.oModel.setProperty("/editBtn", true);
+                    this.oModel.setProperty("/createBtnVis", false);
+                }else {
+                    this.oModel.setProperty("/comBtnVis", true);
+                    this.oModel.setProperty("/editBtn", true);
+                    this.oModel.setProperty("/createBtnVis", true);
 
                 }
 
@@ -144,6 +151,7 @@ sap.ui.define([
                 this.oModel.setProperty("/disBtn", false);
                 this.oModel.setProperty("/editBtn", true);
                 this.oModel.setProperty("/valueState", "None");
+                this.getDetails(this.sParam.NotificationNo[0]);
             },
             onTypChange: function (evt) {
                 var seltyp = evt.getSource().getSelectedKey();
@@ -152,10 +160,23 @@ sap.ui.define([
                 } else if (seltyp === "ZG") {
                     this.oModel.setProperty("/orderTyp", "ZGEN")
                 }
+            },
 
+            handleLiveChange: function (oEvent) {
+                var oTextArea = oEvent.getSource();
+               var iValueLength = oTextArea.getValue().length;
+               if(iValueLength <= 132){
+                this.oModel.setProperty("/valueState", "None");
+                this.oModel.setProperty("/valueStateLTxt", "");
+               }
             },
 
             onSavePress: function () {
+                if(this.oModel.getData().ltext.length > "132"){
+                    this.oModel.setProperty("/valueState", "Error");
+                    this.oModel.setProperty("/valueStateLTxt", "Long text character limit not to exceed 132 char");
+                    return;
+                }
                 var data = {
                     "Number": this.notoModel.getData().NotifNo,
                     "LongText": this.oModel.getData().ltext,
@@ -210,6 +231,11 @@ sap.ui.define([
 
             onCreateWorkOrder: function () {
                 if (this.editInd === "X") {
+                    if(this.oModel.getData().ltext.length > "132"){
+                        this.oModel.setProperty("/valueState", "Error");
+                        this.oModel.setProperty("/valueStateLTxt", "Long text character limit not to exceed 132 char");
+                        return;
+                    }
                     var data = {
                         "NotifNo": this.notoModel.getData().NotifNo,
                         "Planplant": this.notoModel.getData().Planplant,
@@ -217,7 +243,8 @@ sap.ui.define([
                         "OrderType": this.oModel.getData().orderTyp,
                         "Equipment": this.notoModel.getData().Equipment,
                         "ShortText": this.notoModel.getData().ShortText,
-                        "LongText": this.oModel.getData().ltext
+                        "LongText": this.oModel.getData().ltext,
+                        "Pm_Werks" : this.oModel.getData().Workctr
                     }
                     this.onCreateWorkOrdersv(data);
                 } else {
@@ -226,7 +253,8 @@ sap.ui.define([
                         "Planplant": this.notoModel.getData().Planplant,
                         "FunctLoc": this.notoModel.getData().FunctLoc,
                         "OrderType": this.oModel.getData().orderTyp,
-                        "Equipment": this.notoModel.getData().Equipment
+                        "Equipment": this.notoModel.getData().Equipment,
+                        "Pm_Werks" : this.oModel.getData().Workctr
                     }
                     this.onCreateWorkOrdersv(data);
                 }
@@ -265,8 +293,7 @@ sap.ui.define([
 
             onComplete: function () {
                 var data = {
-                    "Number": this.notoModel.getData().NotifNo,
-                    "Planplant": this.notoModel.getData().Planplant
+                    "Number": this.notoModel.getData().NotifNo
                 }
                 var comModel = this.getOwnerComponent().getModel();
                 var that = this;
