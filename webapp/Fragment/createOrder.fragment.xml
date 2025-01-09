@@ -30,7 +30,7 @@
                 <Label text="Planning Plant" />
                 <Input value="{notifData>/Planplant}" editable="false"/>
                 <Label text="Main Work Center" />
-                <Input value="{view>/Workctr}" editable="false"/>
+                <Input value="{view>/Workctr}" editable="true"/>
                      <Input value="{notifData>/Planplant}" editable="false"/>
 					 <Label ></Label>
 					 <Button text="Create Work Order" type="Accept" press="onCreateWorkOrder"/>

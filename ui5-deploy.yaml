@@ -21,6 +21,6 @@ builder:
           name: ZUI_PM_CHNGNOT
           description: Change Notifition Fiori App
           package: ZPM_FIORI
-          transport: DGWK900753
+          transport: DGWK900820
         exclude:
           - /test/
